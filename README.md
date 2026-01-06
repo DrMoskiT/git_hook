@@ -45,4 +45,4 @@ git config hooks.gitleaks.enable true
 echo 'TELEGRAM_BOT_TOKEN=1234567890:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' > test.txt
 git add test.txt
 git commit -m "test: telegram token"
-# [gitleaks] Secrets detected — commit REJECTED.
+[gitleaks] Secrets detected — commit REJECTED.
