@@ -49,7 +49,7 @@ fi
 # -------------------------
 echo "[gitleaks] scanning staged changes..."
 set +e
-"$GITLEAKS_BIN" protect --staged --redact --no-banner
+"$GITLEAKS_BIN" protect --staged --redact --no-banner --config "$REPO_ROOT/.gitleaks.toml"
 rc=$?
 set -e
 
