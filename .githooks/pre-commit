@@ -55,10 +55,10 @@ set -e
 
 if [[ $rc -ne 0 ]]; then
   echo ""
-  echo "❌ [gitleaks] Secrets detected — commit REJECTED."
+  echo "[gitleaks] Secrets detected — commit REJECTED."
   echo "Tip: remove secret from staged files and commit again."
   exit $rc
 fi
 
-echo "✅ [gitleaks] OK — no secrets found in staged changes."
+echo "[gitleaks] OK — no secrets found in staged changes."
 exit 0
