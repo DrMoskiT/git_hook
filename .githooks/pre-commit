@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# -------------------------
+# Enable/Disable через git config
+# -------------------------
+# Увімкнено за замовчуванням.
+ENABLED="$(git config --bool hooks.gitleaks.enable || echo "true")"
+if [[ "$ENABLED" != "true" ]]; then
+  echo "[gitleaks] disabled: git config hooks.gitleaks.enable=false"
+  exit 0
+fi
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+BIN_DIR="$REPO_ROOT/.githooks/bin"
+INSTALLER="$REPO_ROOT/scripts/install_gitleaks.sh"
+
+mkdir -p "$BIN_DIR"
+
+# -------------------------
+# Пошук gitleaks
+# -------------------------
+find_gitleaks() {
+  if command -v gitleaks >/dev/null 2>&1; then
+    command -v gitleaks
+    return 0
+  fi
+  if [[ -x "$BIN_DIR/gitleaks" ]]; then
+    echo "$BIN_DIR/gitleaks"
+    return 0
+  fi
+  return 1
+}
+
+GITLEAKS_BIN=""
+if GITLEAKS_BIN="$(find_gitleaks)"; then
+  :
+else
+  echo "[gitleaks] not found — auto-installing..."
+  bash "$INSTALLER"
+  GITLEAKS_BIN="$(find_gitleaks)" || {
+    echo "[gitleaks] ERROR: install failed, gitleaks still not found."
+    exit 1
+  }
+fi
+
+# -------------------------
+# Скан staged змін
+# -------------------------
+echo "[gitleaks] scanning staged changes..."
+set +e
+"$GITLEAKS_BIN" protect --staged --redact --no-banner
+rc=$?
+set -e
+
+if [[ $rc -ne 0 ]]; then
+  echo ""
+  echo "❌ [gitleaks] Secrets detected — commit REJECTED."
+  echo "Tip: remove secret from staged files and commit again."
+  exit $rc
+fi
+
+echo "✅ [gitleaks] OK — no secrets found in staged changes."
+exit 0
