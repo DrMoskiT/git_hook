@@ -21,26 +21,26 @@
 ### 1) Увімкнути використання локальних hook-ів репозиторію
 У корені репозиторію виконай:
 
-```bash
+
 git config core.hooksPath .githooks
-2) Дати права на виконання
-bash
-Копіювати код
+
+### 2) Дати права на виконання
+
 chmod +x .githooks/pre-commit
 chmod +x scripts/install_gitleaks.sh
 
 ---
 
-## Налаштування (enable/disable)
+## Налаштування (enable/disable)-
 ### Увімкнути (за замовчуванням увімкнено)
 git config hooks.gitleaks.enable true
 
 ### Вимкнути
 git config hooks.gitleaks.enable false
+
 ---
 
 ## Demo (Telegram token)
-```bash
 git config hooks.gitleaks.enable true
 echo 'TELEGRAM_BOT_TOKEN=1234567890:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' > test.txt
 git add test.txt
