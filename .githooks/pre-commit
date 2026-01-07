@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# -------------------------
-# Enable/Disable через git config
-# -------------------------
-# Увімкнено за замовчуванням.
+
 ENABLED="$(git config --bool hooks.gitleaks.enable || echo "true")"
 if [[ "$ENABLED" != "true" ]]; then
   echo "[gitleaks] disabled: git config hooks.gitleaks.enable=false"
@@ -17,9 +14,7 @@ INSTALLER="$REPO_ROOT/scripts/install_gitleaks.sh"
 
 mkdir -p "$BIN_DIR"
 
-# -------------------------
-# Пошук gitleaks
-# -------------------------
+
 find_gitleaks() {
   if command -v gitleaks >/dev/null 2>&1; then
     command -v gitleaks
@@ -44,9 +39,7 @@ else
   }
 fi
 
-# -------------------------
-# Скан staged змін
-# -------------------------
+
 echo "[gitleaks] scanning staged changes..."
 set +e
 "$GITLEAKS_BIN" protect --staged --redact --no-banner --config "$REPO_ROOT/.gitleaks.toml"
