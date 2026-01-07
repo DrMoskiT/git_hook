@@ -27,7 +27,6 @@ case "$ARCH" in
   *) echo "[install] Unsupported ARCH: $ARCH"; exit 1 ;;
 esac
 
-# Беремо latest release tag через GitHub API
 tag="$(curl -fsSL https://api.github.com/repos/gitleaks/gitleaks/releases/latest | \
   sed -n 's/.*"tag_name": *"\([^"]*\)".*/\1/p' | head -n1)"
 
@@ -50,7 +49,6 @@ curl -fL "$url" -o "$tmp/$asset"
 echo "[install] extracting..."
 tar -xzf "$tmp/$asset" -C "$tmp"
 
-# В архіві зазвичай "gitleaks" або "gitleaks.exe"
 if [[ -f "$tmp/gitleaks.exe" ]]; then
   mv -f "$tmp/gitleaks.exe" "$BIN_DIR/gitleaks"
 elif [[ -f "$tmp/gitleaks" ]]; then
